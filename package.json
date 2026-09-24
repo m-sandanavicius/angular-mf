@@ -1,0 +1,44 @@
+{
+  "name": "shop-shell",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve shop-shell --port 4200",
+    "start:cart": "ng serve cart --port 4201",
+    "start:checkout": "ng serve checkout --port 4202",
+    "start:admin": "ng serve admin --port 4203",
+    "start:all": "concurrently --kill-others-on-fail --names shell,cart,checkout,admin --prefix-colors blue,green,magenta,yellow \"npm start\" \"npm run start:cart\" \"npm run start:checkout\" \"npm run start:admin\"",
+    "build:all": "ng build shop-shell && ng build cart && ng build checkout && ng build admin",
+    "build:host": "ng build shop-shell",
+    "build:cart": "ng build cart",
+    "build:checkout": "ng build checkout",
+    "build:admin": "ng build admin",
+    "build:vercel": "node scripts/vercel-build.mjs",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@11.12.1",
+  "dependencies": {
+    "@angular-architects/native-federation": "^22.2.0",
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "es-module-shims": "^2.8.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.2.0",
+    "@angular/cli": "^22.2.0",
+    "@angular/compiler-cli": "^22.2.0",
+    "@softarc/native-federation-orchestrator": "^4.6.0",
+    "concurrently": "^10.0.5",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2"
+  }
+}
