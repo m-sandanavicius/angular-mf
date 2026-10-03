@@ -1,2 +1,21 @@
-import { withNativeFederation, fromPackageJson } from '@angular-architects/native-federation/config';
-export default withNativeFederation({ name: 'nova-commerce-shell', exposes: { './Storefront': './src/app/features/storefront.component.ts', './Cart': './src/app/features/cart.component.ts', './Checkout': './src/app/features/checkout.component.ts', './Admin': './src/app/features/admin.component.ts' }, shared: fromPackageJson({ singleton: true, strictVersion: true, requiredVersion: 'auto', build: 'package' }).patch(['@angular/core'], { includeSecondaries: { keepAll: true } }), skip: ['rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'], features: { denseChunking: true } });
+import {
+  withNativeFederation,
+  fromPackageJson,
+} from '@angular-architects/native-federation/config';
+export default withNativeFederation({
+  name: 'nova-commerce-shell',
+  exposes: {
+    './Storefront': './src/app/features/storefront.component.ts',
+    './Cart': './src/app/features/cart.component.ts',
+    './Checkout': './src/app/features/checkout.component.ts',
+    './Admin': './src/app/features/admin.component.ts',
+  },
+  shared: fromPackageJson({
+    singleton: true,
+    strictVersion: true,
+    requiredVersion: 'auto',
+    build: 'package',
+  }).patch(['@angular/core'], { includeSecondaries: { keepAll: true } }),
+  skip: ['rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'],
+  features: { denseChunking: true },
+});

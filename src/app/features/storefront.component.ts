@@ -1,2 +1,79 @@
-import { Component, computed, signal } from '@angular/core'; import { CurrencyPipe } from '@angular/common'; import { RouterLink } from '@angular/router'; import { CommerceStore } from '../core/commerce.store'; import { ShellComponent } from '../shared/shell.component';
-@Component({ selector: 'storefront-remote', imports: [ShellComponent, CurrencyPipe, RouterLink], template: `<shop-shell label="STOREFRONT REMOTE"><section class="hero"><div><p class="eyebrow">01 — AUTUMN / WINTER 2026</p><h1>Objects for<br><em>slow living.</em></h1><p class="intro">A considered edit of tactile forms and warm materials, made to make every day feel more intentional.</p><a class="button" href="#collection">Explore collection <b>→</b></a></div><div class="hero-art"><div class="sun"></div><div class="arch"></div><span>01</span></div></section><section id="collection" class="collection"><div class="section-head"><div><p class="eyebrow">THE COLLECTION</p><h2>New arrivals</h2></div><div class="filters">@for (filter of filters; track filter) { <button [class.selected]="selected() === filter" (click)="selected.set(filter)">{{filter}}</button> }</div></div><div class="product-grid">@for (product of filtered(); track product.id) { <article class="product"><div class="product-art" [style.background]="product.color"><small>{{product.badge || 'Edition 01'}}</small><span>{{product.image}}</span><button (click)="store.add(product)" aria-label="Add {{product.name}}">+</button></div><div class="product-info"><div><h3>{{product.name}}</h3><p>{{product.category}}</p></div><strong>{{product.price | currency:'EUR':'symbol':'1.0-0'}}</strong></div></article> }</div></section><section class="manifesto"><p class="eyebrow">OUR POINT OF VIEW</p><h2>Made to stay,<br>not to replace.</h2><p>We work with small workshops and honest materials to make objects that gather character over time.</p><a routerLink="/admin">View the studio <b>→</b></a></section></shop-shell>` }) export class StorefrontComponent { filters=['All','Furniture','Lighting','Objects']; selected=signal('All'); filtered=computed(() => this.selected()==='All' ? this.store.products() : this.store.products().filter(p => p.category === this.selected())); constructor(public store: CommerceStore) {} }
+import { Component, computed, signal } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { CommerceStore } from '../core/commerce.store';
+import { ShellComponent } from '../shared/shell.component';
+@Component({
+  selector: 'storefront-remote',
+  imports: [ShellComponent, CurrencyPipe, RouterLink],
+  template: `<shop-shell label="STOREFRONT REMOTE"
+    ><section class="hero">
+      <div>
+        <p class="eyebrow">01 — AUTUMN / WINTER 2026</p>
+        <h1>Objects for<br /><em>slow living.</em></h1>
+        <p class="intro">
+          A considered edit of tactile forms and warm materials, made to make every day feel more
+          intentional.
+        </p>
+        <a class="button" href="#collection">Explore collection <b>→</b></a>
+      </div>
+      <div class="hero-art">
+        <div class="sun"></div>
+        <div class="arch"></div>
+        <span>01</span>
+      </div>
+    </section>
+    <section id="collection" class="collection">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">THE COLLECTION</p>
+          <h2>New arrivals</h2>
+        </div>
+        <div class="filters">
+          @for (filter of filters; track filter) {
+            <button [class.selected]="selected() === filter" (click)="selected.set(filter)">
+              {{ filter }}
+            </button>
+          }
+        </div>
+      </div>
+      <div class="product-grid">
+        @for (product of filtered(); track product.id) {
+          <article class="product">
+            <div class="product-art" [style.background]="product.color">
+              <small>{{ product.badge || 'Edition 01' }}</small
+              ><span>{{ product.image }}</span
+              ><button (click)="store.add(product)" aria-label="Add {{ product.name }}">+</button>
+            </div>
+            <div class="product-info">
+              <div>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.category }}</p>
+              </div>
+              <strong>{{ product.price | currency: 'EUR' : 'symbol' : '1.0-0' }}</strong>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+    <section class="manifesto">
+      <p class="eyebrow">OUR POINT OF VIEW</p>
+      <h2>Made to stay,<br />not to replace.</h2>
+      <p>
+        We work with small workshops and honest materials to make objects that gather character over
+        time.
+      </p>
+      <a routerLink="/admin">View the studio <b>→</b></a>
+    </section></shop-shell
+  >`,
+})
+export class StorefrontComponent {
+  filters = ['All', 'Furniture', 'Lighting', 'Objects'];
+  selected = signal('All');
+  filtered = computed(() =>
+    this.selected() === 'All'
+      ? this.store.products()
+      : this.store.products().filter((p) => p.category === this.selected()),
+  );
+  constructor(public store: CommerceStore) {}
+}

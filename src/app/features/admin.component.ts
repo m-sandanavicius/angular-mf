@@ -1,2 +1,111 @@
-import { Component, signal } from '@angular/core'; import { CurrencyPipe } from '@angular/common'; import { CommerceStore } from '../core/commerce.store'; import { ShellComponent } from '../shared/shell.component';
-@Component({ selector: 'admin-remote', imports: [ShellComponent, CurrencyPipe], template: `<shop-shell label="ADMIN REMOTE"><section class="admin-head"><div><p class="eyebrow">ADMIN / OVERVIEW</p><h1>Good morning, Mara.</h1></div><button class="button" (click)="showForm.set(!showForm())">{{showForm() ? 'Cancel' : '+ Add product'}}</button></section>@if(showForm()) { <form class="add-product" (submit)="add($event)"><input #name placeholder="Product name" required><input #price type="number" placeholder="Price" required><button class="button">Save product →</button></form> }<section class="metrics">@for (item of stats; track item.label) { <article><p>{{item.label}}</p><strong>{{item.value}}</strong><small>{{item.delta}} vs. last week</small></article>}</section><section class="admin-panel"><div class="panel-head"><h2>Recent orders</h2><a>View all →</a></div><table><thead><tr><th>ORDER</th><th>CUSTOMER</th><th>STATUS</th><th>TOTAL</th></tr></thead><tbody>@for (order of orders; track order.id) {<tr><td>{{order.id}}</td><td>{{order.customer}}</td><td><span class="status">{{order.status}}</span></td><td>{{order.total | currency:'EUR':'symbol':'1.0-0'}}</td></tr>}</tbody></table></section><section class="admin-panel products-table"><div class="panel-head"><h2>Catalog</h2><span>{{store.products().length}} products</span></div>@for(product of store.products(); track product.id){<div class="catalog-row"><div class="tiny-art" [style.background]="product.color">{{product.image}}</div><span>{{product.name}}</span><small>{{product.category}}</small><strong>{{product.price | currency:'EUR':'symbol':'1.0-0'}}</strong></div>}</section></shop-shell>` }) export class AdminComponent { showForm=signal(false); stats=[{label:'Revenue',value:'€8,420',delta:'+12.5%'},{label:'Orders',value:'128',delta:'+8.4%'},{label:'Conversion',value:'4.8%',delta:'+0.9%'},{label:'Items sold',value:'246',delta:'+15.2%'}]; orders=[{id:'#NOVA-1084',customer:'Alma Janė',status:'Fulfilled',total:768},{id:'#NOVA-1083',customer:'Lukas Petrauskas',status:'Processing',total:128},{id:'#NOVA-1082',customer:'Eva Olsen',status:'Fulfilled',total:292}]; constructor(public store: CommerceStore){} add(event:Event){event.preventDefault();const f=event.target as HTMLFormElement, i=f.querySelectorAll('input');this.store.addProduct({id:Date.now(),name:i[0].value,price:Number(i[1].value),category:'Objects',color:'#eadbc7',image:'✦',badge:'New'});this.showForm.set(false);f.reset();} }
+import { Component, signal } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { CommerceStore } from '../core/commerce.store';
+import { ShellComponent } from '../shared/shell.component';
+@Component({
+  selector: 'admin-remote',
+  imports: [ShellComponent, CurrencyPipe],
+  template: `<shop-shell label="ADMIN REMOTE"
+    ><section class="admin-head">
+      <div>
+        <p class="eyebrow">ADMIN / OVERVIEW</p>
+        <h1>Good morning, Mara.</h1>
+      </div>
+      <button class="button" (click)="showForm.set(!showForm())">
+        {{ showForm() ? 'Cancel' : '+ Add product' }}
+      </button>
+    </section>
+    @if (showForm()) {
+      <form class="add-product" (submit)="add($event)">
+        <input #name placeholder="Product name" required /><input
+          #price
+          type="number"
+          placeholder="Price"
+          required
+        /><button class="button">Save product →</button>
+      </form>
+    }
+    <section class="metrics">
+      @for (item of stats; track item.label) {
+        <article>
+          <p>{{ item.label }}</p>
+          <strong>{{ item.value }}</strong
+          ><small>{{ item.delta }} vs. last week</small>
+        </article>
+      }
+    </section>
+    <section class="admin-panel">
+      <div class="panel-head">
+        <h2>Recent orders</h2>
+        <a>View all →</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ORDER</th>
+            <th>CUSTOMER</th>
+            <th>STATUS</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of orders; track order.id) {
+            <tr>
+              <td>{{ order.id }}</td>
+              <td>{{ order.customer }}</td>
+              <td>
+                <span class="status">{{ order.status }}</span>
+              </td>
+              <td>{{ order.total | currency: 'EUR' : 'symbol' : '1.0-0' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+    <section class="admin-panel products-table">
+      <div class="panel-head">
+        <h2>Catalog</h2>
+        <span>{{ store.products().length }} products</span>
+      </div>
+      @for (product of store.products(); track product.id) {
+        <div class="catalog-row">
+          <div class="tiny-art" [style.background]="product.color">{{ product.image }}</div>
+          <span>{{ product.name }}</span
+          ><small>{{ product.category }}</small
+          ><strong>{{ product.price | currency: 'EUR' : 'symbol' : '1.0-0' }}</strong>
+        </div>
+      }
+    </section></shop-shell
+  >`,
+})
+export class AdminComponent {
+  showForm = signal(false);
+  stats = [
+    { label: 'Revenue', value: '€8,420', delta: '+12.5%' },
+    { label: 'Orders', value: '128', delta: '+8.4%' },
+    { label: 'Conversion', value: '4.8%', delta: '+0.9%' },
+    { label: 'Items sold', value: '246', delta: '+15.2%' },
+  ];
+  orders = [
+    { id: '#NOVA-1084', customer: 'Alma Janė', status: 'Fulfilled', total: 768 },
+    { id: '#NOVA-1083', customer: 'Lukas Petrauskas', status: 'Processing', total: 128 },
+    { id: '#NOVA-1082', customer: 'Eva Olsen', status: 'Fulfilled', total: 292 },
+  ];
+  constructor(public store: CommerceStore) {}
+  add(event: Event) {
+    event.preventDefault();
+    const f = event.target as HTMLFormElement,
+      i = f.querySelectorAll('input');
+    this.store.addProduct({
+      id: Date.now(),
+      name: i[0].value,
+      price: Number(i[1].value),
+      category: 'Objects',
+      color: '#eadbc7',
+      image: '✦',
+      badge: 'New',
+    });
+    this.showForm.set(false);
+    f.reset();
+  }
+}
